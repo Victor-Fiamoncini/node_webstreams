@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NodeJS Webstreams</title>
+  <style>
+    body {
+      background: #000;
+      margin: 0;
+      padding: 20px;
+      font-size: 1rem;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header button {
+      border: 1px solid #ccc;
+      background: none;
+      color: #ccc;
+      font-size: 1.25rem;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .grid article {
+      border: 1px solid #ccc;
+    }
+
+    .grid .text {
+      padding: 20px;
+      color: #ccc;
+    }
+
+    .grid .text h3 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .grid .text p {
+      text-align: justify;
+    }
+
+    .grid .text a {
+      color: #ccc;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button id="start" type="button" title="Start">Start</button>
+
+    <button id="stop" type="button" title="Stop">Stop</button>
+  </header>
+
+  <div class="container">
+    <main id="cards" class="grid">
+      <article>
+        <div class="text">
+          <h3>Hello world</h3>
+
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis dolorem velit quo accusantium error iure laudantium quam distinctio voluptates harum.</p>
+
+          <a href="http://" target="_blank" rel="noopener noreferrer">Here</a>
+        </div>
+      </article>
+    </main>
+  </div>
+</body>
+</html>
