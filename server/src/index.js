@@ -23,10 +23,14 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  let items = 0;
+  let itemsProcessed = 0;
+
+  const readStream = createReadStream(CSV_PATH);
+
+  const csvToJsonTransformStream = Transform.toWeb(csvtojson());
 
   const transformStream = new TransformStream({
-    transform(chunk, controller) {
+    transform: (chunk, controller) => {
       const parsedChunk = JSON.parse(Buffer.from(chunk).toString());
       const mappedChunk = {
         title: parsedChunk?.title,
@@ -40,23 +44,26 @@ const server = createServer(async (request, response) => {
   });
 
   const writableStream = new WritableStream({
-    async write(chunk) {
+    write: async (chunk) => {
       await setTimeout(1000);
 
-      items++;
+      itemsProcessed++;
       response.write(chunk);
     },
-    close() {
-      response.end();
-    },
+
+    close: () => response.end(),
   });
 
-  Readable.toWeb(createReadStream(CSV_PATH))
-    .pipeThrough(Transform.toWeb(csvtojson()))
+  Readable.toWeb(readStream)
+    .pipeThrough(csvToJsonTransformStream)
     .pipeThrough(transformStream)
     .pipeTo(writableStream);
 
   response.writeHead(200, headers);
+
+  request.once("close", () => {
+    console.log(`Connection closed, ${itemsProcessed} items processed`);
+  });
 });
 
 server
