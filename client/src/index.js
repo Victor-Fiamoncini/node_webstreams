@@ -35,15 +35,15 @@ function convertNdJsonToJsonObject() {
   });
 }
 
-function appendToHmtl(element) {
+function appendAnimeCardToHmtl(element) {
   return new WritableStream({
     write: ({ title, description, urlAnime }) => {
       const card = `
         <article>
           <div class="text">
-            <h3>${title}</h3>
+            <h3>${title.slice(0, 100)}</h3>
 
-            <p>${description}</p>
+            <p>${description.slice(0, 100)}</p>
 
             <a href="${urlAnime}" target="_blank" rel="noopener noreferrer">Anime link here</a>
           </div>
@@ -52,18 +52,28 @@ function appendToHmtl(element) {
 
       element.innerHTML += card;
     },
+
+    abort: (reason) => console.warn(`Request aborted with - ${reason}`),
   });
 }
 
 async function main() {
+  let abortController = new AbortController();
   const [startButton, stopButton, cardsGrid] = ["start", "stop", "cards"].map(
     (elementId) => document.getElementById(elementId)
   );
 
-  const abortController = new AbortController();
+  startButton.addEventListener("click", async () => {
+    const readable = await getAnimes(abortController.signal);
 
-  const readable = await getAnimes(abortController.signal);
-  readable.pipeTo(appendToHmtl(cardsGrid));
+    readable.pipeTo(appendAnimeCardToHmtl(cardsGrid));
+  });
+
+  stopButton.addEventListener("click", () => {
+    abortController.abort();
+
+    abortController = new AbortController();
+  });
 }
 
 await main();
